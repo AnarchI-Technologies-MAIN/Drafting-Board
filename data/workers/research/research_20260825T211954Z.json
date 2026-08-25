@@ -1,0 +1,13 @@
+{
+  "bot": "research-bot",
+  "kind": "research_snapshot",
+  "ts": "2026-08-25T21:19:54.450198Z",
+  "topic_clusters": [
+    "node-memory-leak",
+    "php-deprecated-arrays",
+    "solidity-reentrancy"
+  ],
+  "keywords": [],
+  "raw_issue_count": 3,
+  "source_file": "/app/data/raw_issues.json"
+}

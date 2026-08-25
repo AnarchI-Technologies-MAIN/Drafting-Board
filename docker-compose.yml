@@ -1,28 +1,154 @@
-version: '3.8'
-
 services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: anarchi_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-anarchi_db}
+      POSTGRES_USER: ${POSTGRES_USER:-anarchi}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-anarchi_password}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-anarchi} -d ${POSTGRES_DB:-anarchi_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - anarchi-spine
+
   anarchi-engine:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: anarchi_blog_engine
-    ports:
-      - "3080:3080"
-    environment:
-      - PORT=3080
-      - NODE_ENV=production
-    volumes:
-      - ./data:/app/data
-    deploy:
-      resources:
-        limits:
-          cpus: '1.0'
-          memory: 512M
-        reservations:
-          memory: 128M
     restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PORT: ${APP_PORT:-3081}
+      NODE_ENV: production
+      DATABASE_URL: postgres://${POSTGRES_USER:-anarchi}:${POSTGRES_PASSWORD:-anarchi_password}@postgres:5432/${POSTGRES_DB:-anarchi_db}
+    ports:
+      - "127.0.0.1:${APP_PORT:-3081}:${APP_PORT:-3081}"
+    volumes:
+      - .:/app
+      - ./data:/app/data
+    working_dir: /app
+    command: node server.js
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3080/api/status"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:${APP_PORT:-3081}/api/status >/dev/null || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 12
+    networks:
+      - anarchi-spine
+
+  research-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: anarchi_research_bot
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    working_dir: /app
+    volumes:
+      - .:/app
+      - ./data:/app/data
+    command: python3 -u /app/workers/research_bot.py
+    environment:
+      BOT_NAME: research-bot
+      BOT_MODE: headless
+      DATABASE_URL: postgres://${POSTGRES_USER:-anarchi}:${POSTGRES_PASSWORD:-anarchi_password}@postgres:5432/${POSTGRES_DB:-anarchi_db}
+    networks:
+      - anarchi-spine
+
+  outreach-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: anarchi_outreach_bot
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    working_dir: /app
+    volumes:
+      - .:/app
+      - ./data:/app/data
+    command: python3 -u /app/workers/outreach_bot.py
+    environment:
+      BOT_NAME: outreach-bot
+      BOT_MODE: headless
+      DATABASE_URL: postgres://${POSTGRES_USER:-anarchi}:${POSTGRES_PASSWORD:-anarchi_password}@postgres:5432/${POSTGRES_DB:-anarchi_db}
+    networks:
+      - anarchi-spine
+
+  crawler-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: anarchi_crawler_bot
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    working_dir: /app
+    volumes:
+      - .:/app
+      - ./data:/app/data
+    command: python3 -u /app/workers/crawler_bot.py
+    environment:
+      BOT_NAME: crawler-bot
+      BOT_MODE: headless
+      DATABASE_URL: postgres://${POSTGRES_USER:-anarchi}:${POSTGRES_PASSWORD:-anarchi_password}@postgres:5432/${POSTGRES_DB:-anarchi_db}
+    networks:
+      - anarchi-spine
+
+  compiler-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: anarchi_compiler_bot
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    working_dir: /app
+    volumes:
+      - .:/app
+      - ./data:/app/data
+    command: python3 -u /app/workers/compiler_bot.py
+    environment:
+      BOT_NAME: compiler-bot
+      BOT_MODE: headless
+      DATABASE_URL: postgres://${POSTGRES_USER:-anarchi}:${POSTGRES_PASSWORD:-anarchi_password}@postgres:5432/${POSTGRES_DB:-anarchi_db}
+    networks:
+      - anarchi-spine
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: anarchi_cloudflared
+    restart: unless-stopped
+    depends_on:
+      anarchi-engine:
+        condition: service_healthy
+    environment:
+      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN}
+    command: tunnel --no-autoupdate run --config /etc/cloudflared/config.yml
+    volumes:
+      - ./cloudflared:/etc/cloudflared:ro
+    networks:
+      - anarchi-spine
+
+volumes:
+  postgres_data:
+
+networks:
+  anarchi-spine:
+    driver: bridge

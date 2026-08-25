@@ -1,0 +1,87 @@
+{
+  "bot": "outreach-bot",
+  "kind": "outreach_snapshot",
+  "ts": "2026-08-25T21:20:08.251638Z",
+  "count": 4,
+  "offers": [
+    {
+      "id": "sentry-dev-pro",
+      "name": "Sentry Real-time Error Tracking",
+      "category": "observability",
+      "keywords": [
+        "sentry",
+        "error",
+        "exception",
+        "trace",
+        "stacktrace",
+        "bug",
+        "crash",
+        "logging"
+      ],
+      "url": "https://sentry.io/?utm_source=anarchi-tech&utm_medium=affiliate&utm_campaign=devstack_crackback",
+      "cta_text": "Catch & Fix Runtime Errors Before Production",
+      "description": "Stop guessing why your node or container failed. Sentry gives code-level stacktraces, performance telemetry, and instant diagnostic alerts.",
+      "badge_color": "#362D59",
+      "payout_score": 95
+    },
+    {
+      "id": "datadog-apm",
+      "name": "Datadog Cloud Monitoring & APM",
+      "category": "observability",
+      "keywords": [
+        "datadog",
+        "apm",
+        "metrics",
+        "latency",
+        "profiling",
+        "microservices",
+        "docker"
+      ],
+      "url": "https://www.datadoghq.com/?utm_source=anarchi-tech&utm_medium=affiliate&ref=anarchi_core",
+      "cta_text": "Deploy End-to-End Microservice Observability",
+      "description": "Monitor system memory leaks, thread starvation, and fiber line latency with Datadog APM.",
+      "badge_color": "#632CA6",
+      "payout_score": 90
+    },
+    {
+      "id": "vercel-enterprise",
+      "name": "Vercel Edge Platform",
+      "category": "hosting",
+      "keywords": [
+        "next.js",
+        "react",
+        "typescript",
+        "frontend",
+        "edge",
+        "cdn",
+        "vite",
+        "node.js"
+      ],
+      "url": "https://vercel.com/?utm_source=anarchi-tech&utm_medium=partner",
+      "cta_text": "Scale Edge Infrastructure with Zero Cold Starts",
+      "description": "Instant global CDN deployment and programmatic frontend preview pipelines.",
+      "badge_color": "#000000",
+      "payout_score": 85
+    },
+    {
+      "id": "certik-security-audit",
+      "name": "CertiK Web3 & Contract Security",
+      "category": "security",
+      "keywords": [
+        "certik",
+        "audit",
+        "security",
+        "smart contract",
+        "solidity",
+        "web3",
+        "crypto",
+        "vulnerability"
+      ],
+      "url": "https://www.certik.com/?utm_source=anarchi-tech&utm_campaign=wsrs_funnel",
+      "cta_text": "Request Automated Smart Contract Formal Verification",
+      "description": "Shield decentralized protocols from reentrancy attacks, flash loan exploits, and signature replay bugs.",
+      "badge_color": "#F39C12",
+      "payout_score": 98
+    }
+  ]
+}

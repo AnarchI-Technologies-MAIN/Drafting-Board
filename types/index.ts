@@ -19,6 +19,7 @@ export interface SemanticPayload {
   id: string;
   title: string;
   slug: string;
+  topic_cluster?: string;
   tech_stack: string[];
   cleaned_summary: string;
   cleaned_content: string;

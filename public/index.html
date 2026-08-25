@@ -32,33 +32,32 @@
   <!-- PRODUCTION STYLED NAVBAR -->
   <header class="navWrap">
     <div class="nav-brand">
-      <a href="https://www.anarchi-tech.com" target="_blank" style="text-decoration:none; display:flex; align-items:center; gap:10px;">
-        <div class="brand-emblem">▲</div>
+      <a href="https://www.anarchi-tech.com" target="_blank" rel="noreferrer" style="text-decoration:none; display:flex; align-items:center; gap:10px;">
+        <img class="brand-emblem" src="/blog/assets/anarchi-emblem.png" alt="Anarchi Technologies emblem" />
         <span class="brand-text">ANARCHI TECHNOLOGIES</span>
       </a>
       <span class="brand-sub">DEV-STACK CRACK BACK</span>
     </div>
     <div class="nav-links">
       <a href="/blog" class="nav-link active">Engineering Logs</a>
-      <a href="https://www.anarchi-tech.com/wallet-safety-report" class="nav-link" target="_blank">Wallet Report</a>
-      <a href="https://www.anarchi-tech.com" class="nav-link" target="_blank">Principles</a>
-      <a href="/blog/admin/" class="quiet-btn" target="_blank" style="text-decoration:none; padding:0.4rem 0.9rem;">⚙️ Admin</a>
-      <a href="https://www.anarchi-tech.com/wallet-safety-report" target="_blank" class="gold-btn" style="text-decoration:none;">Start a Report</a>
+      <a href="https://www.anarchi-tech.com/wallet-safety-report" class="nav-link" target="_blank" rel="noreferrer">Wallet Report</a>
+      <a href="https://www.anarchi-tech.com" class="nav-link" target="_blank" rel="noreferrer">Principles</a>
+      <a href="https://www.anarchi-tech.com/wallet-safety-report" target="_blank" rel="noreferrer" class="gold-btn" style="text-decoration:none;">Start a Report</a>
     </div>
   </header>
 
   <div class="public-container">
     
     <!-- PRODUCTION STYLED HERO STATEMENT -->
-    <section class="hero-statement">
+    <section class="hero-statement compact-hero">
       <div>
         <p class="eyebrow">DETERMINISTIC SYSTEMS • VISIBLE PROOF</p>
-        <h1>High-Value Developer Debugging & System Architecture Case Studies</h1>
+        <h1>High-value engineering signals from the stack. Indexed, filtered, and written for search.</h1>
         <p class="hero-lead">
-          Programmatically extracted technical postmortems, cryptographic logic fixes, and SHA-256 visual sequence diagrams from active developer issue streams.
+          Programmatically extracted case studies, architecture notes, and security-driven fixes arranged for discovery by topic, relevance, and search query intent.
         </p>
       </div>
-      <div style="display:flex; flex-direction:column; gap:0.8rem; align-items:flex-end;">
+      <div class="hero-actions">
         <a href="https://www.anarchi-tech.com/wallet-safety-report" target="_blank" class="gold-btn" style="text-decoration:none; width:100%; text-align:center;">
           🛡️ Request WSRS Audit →
         </a>
@@ -68,39 +67,58 @@
       </div>
     </section>
 
-    <!-- WSRS CORE FUNNEL BANNER -->
-    <section id="wsrs" class="wsrs-banner">
-      <p class="eyebrow" style="color:var(--gold);">🛡️ WALLET SAFETY REPORT SERVICE (WSRS)</p>
-      <h2>Web3 & Smart Contract Security Audit Lead Funnel</h2>
-      <p>
-        Prevent asset drain, signature replay, and reentrancy exploits before shipping to mainnet. Get a machine-verified cryptographic security report for your smart contract or dApp.
-      </p>
-      <a href="https://www.anarchi-tech.com/wallet-safety-report?ref=public_blog_hero" target="_blank" class="gold-btn" style="text-decoration:none; display:inline-flex;">
-        🔒 Request Immediate WSRS Security Audit →
-      </a>
-    </section>
-
-    <!-- SCOPED DEVELOPER AD ZONE -->
-    <section id="ads" class="scoped-ad-card">
-      <div class="ad-badge">📢 SCOPED DEVELOPER AD PARTNER</div>
-      <div class="ad-body">
-        <h3 class="ad-title">Carbon Ads / EthicalAds Native Developer Slot</h3>
-        <p class="ad-desc">Catch & fix runtime errors before production. Sentry gives code-level stacktraces, V8 heap memory profiling, and instant diagnostic alerts.</p>
-        <a href="https://sentry.io/?utm_source=anarchi-tech&utm_medium=affiliate&ref=public_blog" target="_blank" class="quiet-btn" style="text-decoration:none; font-size:0.7rem; padding:0.4rem 0.8rem;">
-          Inspect Developer Tooling →
-        </a>
+    <section class="toolbar-panel">
+      <div class="toolbar-row">
+        <div class="toolbar-block toolbar-block-wide">
+          <label>Topics</label>
+          <div id="categoryChips" class="category-chips"></div>
+        </div>
+        <div class="toolbar-block search-block">
+          <label>Search</label>
+          <input id="blogSearch" type="search" placeholder="Search the engineering corpus..." />
+        </div>
+        <div class="toolbar-block pagination-block">
+          <label>Page</label>
+          <div class="page-selector" id="pageSelector">
+            <button class="page-btn" data-page="prev" type="button">Prev</button>
+            <span id="pageNumberLabel">1</span>
+            <button class="page-btn" data-page="next" type="button">Next</button>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- PUBLIC CASE STUDIES GRID -->
-    <main class="public-main">
-      <div style="margin-bottom:2rem;">
-        <p class="eyebrow">VERIFIABLE EVIDENCE LOGS</p>
-        <h2 style="font-family:var(--serif); font-size:2rem; color:var(--ivory);">🔥 Trending Engineering Case Studies</h2>
-      </div>
+    <main class="public-main blog-shell">
+      <aside class="blog-sidebar">
+        <div class="sidebar-panel">
+          <p class="eyebrow">SEARCH-BY-CLUSTER</p>
+          <div id="railCategoryList" class="sidebar-category-list"></div>
+        </div>
 
-      <div class="posts-grid" id="publicPostsContainer">
-        <!-- Rendered dynamically by app.js -->
+        <div class="scoped-ad-card sidebar-ad">
+          <div class="ad-badge">📢 AD SPACE</div>
+          <div class="ad-body">
+            <h3 class="ad-title">Developer tooling and infra placement</h3>
+            <p class="ad-desc">High-intent affiliate placements here for infrastructure tooling, hosting, and security stacks that align with the systems being dissected.</p>
+            <a href="https://sentry.io/?utm_source=anarchi-tech&utm_medium=affiliate&ref=public_blog" target="_blank" class="quiet-btn" style="text-decoration:none; font-size:0.7rem; padding:0.4rem 0.8rem;">
+              Sponsor the stack →
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <div class="blog-feed">
+        <div class="section-header-row">
+          <div>
+            <p class="eyebrow">VERIFIABLE EVIDENCE LOGS</p>
+            <h2>Trending engineering case studies</h2>
+          </div>
+          <a href="/blog/categories" class="quiet-btn" style="text-decoration:none;">Browse all categories</a>
+        </div>
+
+        <div class="posts-grid compact-grid" id="publicPostsContainer">
+          <!-- Rendered dynamically by app.js -->
+        </div>
       </div>
     </main>
 

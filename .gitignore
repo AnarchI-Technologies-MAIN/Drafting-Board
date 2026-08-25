@@ -1,0 +1,7 @@
+.env
+.env.*
+cloudflared/credentials.json
+cloudflared/*.pem
+cloudflared/*.json
+node_modules/
+.DS_Store

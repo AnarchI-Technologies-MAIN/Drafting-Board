@@ -1,0 +1,10 @@
+tunnel: anarchi-spine
+credentials-file: /etc/cloudflared/credentials.json
+ingress:
+  - hostname: www.anarchi-tech.com
+    service: http://anarchi-engine:3081
+  - hostname: anarchi-tech.com
+    service: http://anarchi-engine:3081
+  - hostname: dev.anarchi-tech.com
+    service: http://anarchi-engine:3081
+  - service: http_status:404

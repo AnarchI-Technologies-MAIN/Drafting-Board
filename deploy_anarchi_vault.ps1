@@ -13,15 +13,19 @@ if ($PSVersionTable.PSVersion.Major -lt 7) {
     exit 1
 }
 
-# ---- Configuration (edit only if you know what you are doing) ----
-$wslUser = 'ubuntu'
-$wslBaseDir = '/home/ubuntu/anarchi-spine'
+# ---- Configuration (target the existing WSL2 Ubuntu instance and its current user home) ----
+$wslUser = (wsl -e bash -lc 'whoami').Trim()
+if (-not $wslUser) {
+    Write-Host "Unable to detect active WSL user. Aborting." -ForegroundColor Red
+    exit 1
+}
+$wslBaseDir = "/home/$wslUser/anarchi-asset-spine"
 $composeFilename = 'docker-compose.vault.yml'
 $policyFilename = 'vault/config/broker-policy.hcl'
 $pythonFilename = 'anarchi_membrane_broker.py'
 
 # ---- Safety: Do not log secrets ----
-Write-Host "This script will write files into WSL at $wslBaseDir and attempt to start docker compose there." -ForegroundColor Cyan
+Write-Host "This script will use the existing WSL2 Ubuntu instance and write files into $wslBaseDir without creating a new WSL server." -ForegroundColor Cyan
 Write-Host "Make sure you review the generated files before running in production. Secrets must be provided in the WSL environment or via a .env file placed into $wslBaseDir (not committed)." -ForegroundColor Yellow
 
 # ---- Check required environment variables (on Windows side) ----
@@ -192,8 +196,8 @@ if __name__ == "__main__":
 '@
 
 # ---- Write files into WSL by piping content into 'cat > file' on the WSL side (safer than fragile heredocs) ----
-Write-Host "Creating WSL target directory structure: $wslBaseDir" -ForegroundColor Cyan
-wsl -u $wslUser -- bash -c "mkdir -p $wslBaseDir && mkdir -p $wslBaseDir/vault/config && mkdir -p $wslBaseDir/cloudflare"
+Write-Host "Creating WSL target directory structure inside the existing Ubuntu instance: $wslBaseDir" -ForegroundColor Cyan
+wsl -u $wslUser -- bash -c "mkdir -p '$wslBaseDir' && mkdir -p '$wslBaseDir/vault/config' && mkdir -p '$wslBaseDir/cloudflare'"
 
 Write-Host "Writing docker-compose to WSL: $composeFilename" -ForegroundColor Cyan
 $dockerComposeYaml | wsl -u $wslUser -- bash -lc "cat > $wslBaseDir/$composeFilename"

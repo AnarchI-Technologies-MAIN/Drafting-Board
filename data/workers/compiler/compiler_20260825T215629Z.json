@@ -1,0 +1,25 @@
+{
+  "bot": "compiler-bot",
+  "kind": "compiler_snapshot",
+  "ts": "2026-08-25T21:56:29.698205Z",
+  "posts": [
+    {
+      "slug": "migrating-legacy-php-74-array-indexing-methods-to-strict-types-in-php-83",
+      "title": "Migrating Legacy PHP 7.4 Array Indexing Methods to Strict Types in PHP 8.3",
+      "topic": "php-deprecated-arrays",
+      "path": "/app/data/posts/migrating-legacy-php-74-array-indexing-methods-to-strict-types-in-php-83.md"
+    },
+    {
+      "slug": "fixing-nodejs-memory-leaks-and-unhandled-rejections-in-high-concurrency-express",
+      "title": "Fixing Node.js Memory Leaks and Unhandled Rejections in High-Concurrency Express Apps",
+      "topic": "node-memory-leak",
+      "path": "/app/data/posts/fixing-nodejs-memory-leaks-and-unhandled-rejections-in-high-concurrency-express.md"
+    },
+    {
+      "slug": "preventing-cross-function-reentrancy-attacks-in-ethereum-smart-contracts",
+      "title": "Preventing Cross-Function Reentrancy Attacks in Ethereum Smart Contracts",
+      "topic": "solidity-reentrancy",
+      "path": "/app/data/posts/preventing-cross-function-reentrancy-attacks-in-ethereum-smart-contracts.md"
+    }
+  ]
+}

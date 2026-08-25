@@ -29,9 +29,13 @@ app.get('/blog/admin', (req, res) => {
 app.get('/blog/:slug', (req, res) => {
   const slug = req.params.slug;
 
-  // Handle admin route fallback
+  // Handle route fallbacks that are not post slugs.
   if (slug === 'admin') {
     return res.sendFile(path.join(PUBLIC_DIR, 'admin', 'index.html'));
+  }
+
+  if (slug === 'categories' || slug === 'catagories') {
+    return res.send(renderCategoriesPage());
   }
 
   const filepath = path.join(POSTS_DIR, `${slug}.md`);
@@ -149,9 +153,150 @@ app.get('/blog/:slug', (req, res) => {
   res.send(html);
 });
 
+const normalizeCategoryKey = (value = 'general') => {
+  const raw = String(value || 'general').trim();
+  const text = raw.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  return text || 'general';
+};
+
+const escapeHtml = (value = '') => String(value)
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#39;');
+
+const loadPublishedPosts = () => {
+  if (!fs.existsSync(POSTS_DIR)) return [];
+
+  return fs.readdirSync(POSTS_DIR)
+    .filter(file => file.endsWith('.md'))
+    .map(file => {
+      const filepath = path.join(POSTS_DIR, file);
+      const raw = fs.readFileSync(filepath, 'utf-8');
+      let frontmatter = {};
+      let markdownBody = raw;
+      const fmMatch = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
+
+      if (fmMatch) {
+        const fmText = fmMatch[1];
+        markdownBody = fmMatch[2];
+        fmText.split('\n').forEach(line => {
+          const idx = line.indexOf(':');
+          if (idx !== -1) {
+            const key = line.substring(0, idx).trim();
+            let val = line.substring(idx + 1).trim();
+            if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
+            frontmatter[key] = val;
+          }
+        });
+      }
+
+      return {
+        title: frontmatter.title || file.replace(/\.md$/, ''),
+        slug: file.replace(/\.md$/, ''),
+        category: frontmatter.topic_cluster || frontmatter.category || 'general',
+        summary: frontmatter.summary || markdownBody.replace(/[#>*_`\-]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 180),
+        markdown: markdownBody
+      };
+    })
+    .sort((a, b) => a.title.localeCompare(b.title));
+};
+
+const renderCategoriesPage = (selectedCategory = null) => {
+  const posts = loadPublishedPosts();
+  const grouped = new Map();
+  posts.forEach(post => {
+    const key = normalizeCategoryKey(post.category);
+    if (!grouped.has(key)) grouped.set(key, { key, label: post.category || 'General', posts: [] });
+    grouped.get(key).posts.push(post);
+  });
+
+  const categoryList = [...grouped.values()].sort((a, b) => a.label.localeCompare(b.label));
+  const selectedPosts = selectedCategory
+    ? (grouped.get(normalizeCategoryKey(selectedCategory))?.posts || [])
+    : posts.slice(0, 12);
+
+  const categoryMarkup = categoryList.map(cat => `
+    <a class="category-pill ${selectedCategory && normalizeCategoryKey(cat.label) === normalizeCategoryKey(selectedCategory) ? 'active' : ''}" href="/blog/categories/${encodeURIComponent(normalizeCategoryKey(cat.label))}">
+      ${escapeHtml(cat.label)} <span>${cat.posts.length}</span>
+    </a>
+  `).join('');
+
+  const listingMarkup = selectedPosts.length === 0
+    ? '<p class="empty-state">No posts are tagged in this category yet.</p>'
+    : selectedPosts.map(post => `
+      <article class="mini-post-card">
+        <div class="mini-post-kicker">${escapeHtml(post.category || 'General')}</div>
+        <h3><a href="/blog/${encodeURIComponent(post.slug)}">${escapeHtml(post.title)}</a></h3>
+        <p>${escapeHtml(post.summary || 'Deterministic systems and engineering notes.')}</p>
+        <a class="mini-post-link" href="/blog/${encodeURIComponent(post.slug)}">Read the case study →</a>
+      </article>
+    `).join('');
+
+  return `<!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories | Anarchi-Technologies Blog</title>
+    <meta name="description" content="Searchable engineering categories across deterministic systems, developer tooling, security, and architecture case studies.">
+    <link rel="stylesheet" href="/blog/styles.css">
+  </head>
+  <body>
+    <header class="navWrap">
+      <div class="nav-brand">
+        <a href="https://www.anarchi-tech.com" target="_blank" style="text-decoration:none; display:flex; align-items:center; gap:10px;">
+          <div class="brand-emblem">▲</div>
+          <span class="brand-text">ANARCHI TECHNOLOGIES</span>
+        </a>
+        <span class="brand-sub">DEV-STACK CRACK BACK</span>
+      </div>
+      <div class="nav-links">
+        <a href="/blog" class="nav-link">Engineering Logs</a>
+        <a href="/blog/categories" class="nav-link active">Categories</a>
+        <a href="https://www.anarchi-tech.com/wallet-safety-report" class="nav-link" target="_blank">Wallet Report</a>
+      </div>
+    </header>
+
+    <main class="public-container">
+      <section class="category-page-header">
+        <p class="eyebrow">INDEXED TOPIC MAP</p>
+        <h1>Category clusters for search and editorial optimization</h1>
+        <p class="hero-lead">The bot pipeline indexes the corpus by theme and query intent so the blog, search, and topical clusters stay aligned with the content engine.</p>
+      </section>
+
+      <section class="category-toolbar">
+        <a href="/blog" class="quiet-btn" style="text-decoration:none;">← Back to the feed</a>
+        <a href="/blog/categories" class="quiet-btn" style="text-decoration:none;">All topics</a>
+      </section>
+
+      <section class="category-list">${categoryMarkup}</section>
+
+      <section class="category-results">
+        <div class="category-results-header">
+          <h2>${selectedCategory ? `${escapeHtml(selectedCategory)} cluster` : 'All topics'}</h2>
+          <span>${selectedPosts.length} posts</span>
+        </div>
+        <div class="category-grid">${listingMarkup}</div>
+      </section>
+    </main>
+  </body>
+  </html>`;
+};
+
 // Standalone Public Blog Homepage
 app.get('/blog', (req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
+});
+
+app.get(['/blog/categories', '/blog/catagories'], (req, res) => {
+  res.send(renderCategoriesPage());
+});
+
+app.get(['/blog/categories/:slug', '/blog/catagories/:slug'], (req, res) => {
+  const slug = decodeURIComponent(req.params.slug || '').replace(/-/g, ' ');
+  res.send(renderCategoriesPage(slug));
 });
 
 // API Routes
@@ -256,7 +401,11 @@ app.post('/api/pipeline/run', (req, res) => {
 
 // Fallback Root Route
 app.get('/', (req, res) => {
-  res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
+  const host = (req.get('host') || '').toLowerCase();
+  if (host.startsWith('dev.') || host.startsWith('dev-')) {
+    return res.redirect('/blog/admin/');
+  }
+  return res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
 });
 
 // Start Server

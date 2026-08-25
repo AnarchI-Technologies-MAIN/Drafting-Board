@@ -1,0 +1,22 @@
+{
+  "bot": "crawler-bot",
+  "kind": "crawl_snapshot",
+  "ts": "2026-08-25T21:46:29.327968Z",
+  "documents": [
+    {
+      "path": "/app/data/raw_payloads/issue_php_deprecated_array_003.json",
+      "title": "Migrating Legacy PHP 7.4 Array Indexing Methods to Strict Types in PHP 8.3",
+      "summary": ""
+    },
+    {
+      "path": "/app/data/raw_payloads/issue_sentry_node_tracing_002.json",
+      "title": "Fixing Node.js Memory Leaks and Unhandled Rejections in High-Concurrency Express Apps",
+      "summary": ""
+    },
+    {
+      "path": "/app/data/raw_payloads/issue_solidity_reentrancy_001.json",
+      "title": "Preventing Cross-Function Reentrancy Attacks in Ethereum Smart Contracts",
+      "summary": ""
+    }
+  ]
+}

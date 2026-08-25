@@ -6,11 +6,21 @@ if (window.mermaid) {
 let currentPosts = [];
 let currentDiagrams = [];
 let currentConfig = {};
+const publicBlogState = {
+  page: 1,
+  perPage: 5,
+  category: 'all',
+  query: ''
+};
 
 document.addEventListener('DOMContentLoaded', () => {
   if (document.getElementById('hostInfo')) {
     loadStatus();
     setInterval(loadStatus, 10000);
+  }
+
+  if (document.getElementById('publicPostsContainer')) {
+    bindPublicBlogControls();
   }
 
   loadPosts();
@@ -79,33 +89,119 @@ async function loadConfig() {
   }
 }
 
+function normalizeCategoryKey(value = 'general') {
+  return String(value || 'general').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'general';
+}
+
+function formatCategoryLabel(value = 'general') {
+  const text = String(value || 'general').trim();
+  if (!text) return 'General';
+  return text.replace(/[-_]+/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+}
+
+function buildPublicCategoryMarkup(posts) {
+  const categories = ['all', ...new Set(posts.map(post => {
+    const fm = post.frontmatter || {};
+    return fm.topic_cluster || fm.category || 'general';
+  }))];
+
+  const container = document.getElementById('categoryChips');
+  const rail = document.getElementById('railCategoryList');
+
+  const markup = categories.map(category => {
+    const value = category === 'all' ? 'all' : formatCategoryLabel(category);
+    const key = category === 'all' ? 'all' : normalizeCategoryKey(category);
+    const selected = publicBlogState.category === key;
+    return `<button type="button" class="category-chip ${selected ? 'active' : ''}" data-category="${key}">${value}</button>`;
+  }).join('');
+
+  if (container) container.innerHTML = markup;
+  if (rail) rail.innerHTML = markup;
+}
+
+function bindPublicBlogControls() {
+  const search = document.getElementById('blogSearch');
+  if (search) {
+    search.addEventListener('input', (event) => {
+      publicBlogState.query = event.target.value.trim().toLowerCase();
+      publicBlogState.page = 1;
+      renderPublicPosts(currentPosts);
+    });
+  }
+
+  document.addEventListener('click', (event) => {
+    const chip = event.target.closest('[data-category]');
+    if (chip) {
+      publicBlogState.category = chip.dataset.category || 'all';
+      publicBlogState.page = 1;
+      renderPublicPosts(currentPosts);
+      return;
+    }
+
+    const pageButton = event.target.closest('[data-page]');
+    if (!pageButton) return;
+
+    const direction = pageButton.dataset.page;
+    if (direction === 'prev') {
+      publicBlogState.page = Math.max(1, publicBlogState.page - 1);
+    } else if (direction === 'next') {
+      publicBlogState.page += 1;
+    }
+    renderPublicPosts(currentPosts);
+  });
+}
+
 /* CUSTOMER-FACING PUBLIC BLOG RENDERER */
 function renderPublicPosts(posts) {
   const container = document.getElementById('publicPostsContainer');
-  if (posts.length === 0) {
-    container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:3rem; color:var(--text-muted);">No published case studies available. Pipeline auto-runs periodically.</div>`;
+  if (!container) return;
+
+  const filtered = posts.filter(post => {
+    const fm = post.frontmatter || {};
+    const categoryKey = normalizeCategoryKey(fm.topic_cluster || fm.category || 'general');
+    const activeCategory = publicBlogState.category;
+    const matchesCategory = activeCategory === 'all' || categoryKey === activeCategory;
+    const haystack = `${fm.title || ''} ${fm.summary || ''} ${fm.keywords || ''} ${post.markdown || ''}`.toLowerCase();
+    const matchesQuery = !publicBlogState.query || haystack.includes(publicBlogState.query);
+    return matchesCategory && matchesQuery;
+  });
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / publicBlogState.perPage));
+  if (publicBlogState.page > totalPages) publicBlogState.page = totalPages;
+
+  const visiblePosts = filtered.slice((publicBlogState.page - 1) * publicBlogState.perPage, publicBlogState.page * publicBlogState.perPage);
+
+  const pageIndicator = document.getElementById('pageNumberLabel');
+  if (pageIndicator) pageIndicator.textContent = `${publicBlogState.page}/${totalPages}`;
+
+  buildPublicCategoryMarkup(posts);
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:3rem; color:var(--text-muted);">No published case studies match that search or category.</div>`;
     return;
   }
 
-  container.innerHTML = posts.map((post, idx) => {
-    const fm = post.frontmatter;
+  container.innerHTML = visiblePosts.map((post) => {
+    const fm = post.frontmatter || {};
     const wsrsRouted = fm.wsrs_routed === 'true' || fm.wsrs_routed === true;
     const hasDiagram = Boolean(fm.linked_diagram_hash);
+    const categoryLabel = formatCategoryLabel(fm.topic_cluster || fm.category || 'general');
+    const summary = (fm.summary || post.markdown || '').replace(/[#>*_`\-]/g, ' ').replace(/\s+/g, ' ').trim();
 
     return `
       <article class="post-card">
         <div>
           <div class="tag-list">
-            <span class="tag">${fm.topic_cluster || 'general'}</span>
-            ${wsrsRouted ? `<span class="tag wsrs">🛡️ WSRS Security Lead</span>` : ''}
-            ${hasDiagram ? `<span class="tag diagram">📐 SHA-256 Schema</span>` : ''}
+            <span class="tag">${escapeHtml(categoryLabel)}</span>
+            ${wsrsRouted ? `<span class="tag wsrs">🛡️ WSRS</span>` : ''}
+            ${hasDiagram ? `<span class="tag diagram">📐 Diagram</span>` : ''}
           </div>
           <h3 class="post-title">${escapeHtml(fm.title || post.slug)}</h3>
-          <p class="post-summary">${escapeHtml(post.markdown.substring(0, 190))}...</p>
+          <p class="post-summary">${escapeHtml(summary.slice(0, 190))}${summary.length > 190 ? '...' : ''}</p>
         </div>
         <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem; padding-top:1rem; border-top:1px solid var(--line);">
-          <span style="font-size:0.75rem; font-family:var(--mono); color:var(--text-dim);">Schema.org TechArticle</span>
-          <a href="/blog/${post.slug}" class="quiet-btn" style="text-decoration:none; font-size:0.72rem; padding:0.4rem 0.9rem;">Read Full Case Study →</a>
+          <span style="font-size:0.75rem; font-family:var(--mono); color:var(--text-dim);">${escapeHtml(fm.topic_cluster || 'general')}</span>
+          <a href="/blog/${encodeURIComponent(post.slug)}" class="quiet-btn" style="text-decoration:none; font-size:0.72rem; padding:0.4rem 0.9rem;">Read Full Case Study →</a>
         </div>
       </article>
     `;
