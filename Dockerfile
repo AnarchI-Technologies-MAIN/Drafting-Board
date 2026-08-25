@@ -21,8 +21,12 @@ WORKDIR /app
 COPY package.json ./
 RUN npm install --omit=dev
 
-# Install the Python PostgreSQL driver for all worker services.
-RUN pip3 install --break-system-packages --no-cache-dir psycopg2-binary
+# Install the Python PostgreSQL driver and other dependencies for all worker services.
+RUN pip3 install --break-system-packages --no-cache-dir \
+    psycopg2-binary \
+    requests \
+    beautifulsoup4 \
+    pyyaml
 
 # Copy source code and default data directories.
 COPY . .

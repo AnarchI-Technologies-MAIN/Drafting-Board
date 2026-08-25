@@ -131,6 +131,115 @@ services:
     networks:
       - anarchi-spine
 
+  ollama:
+    image: ollama/ollama:latest
+    container_name: anarchi_ollama
+    restart: unless-stopped
+    environment:
+      OLLAMA_NUM_PARALLEL: "1"
+      OLLAMA_NUM_THREAD: "4"
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "127.0.0.1:11434:11434"
+    networks:
+      - anarchi-spine
+
+  wide-search-crawler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: anarchi_wide_search_crawler
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    working_dir: /app
+    volumes:
+      - .:/app
+      - ./data:/app/data
+    command: python3 -u /app/workers/wide_search_crawler.py
+    environment:
+      BOT_NAME: wide-search-crawler
+      BOT_MODE: headless
+      BOT_INTERVAL_SECONDS: "1800"
+      DATABASE_URL: postgres://${POSTGRES_USER:-anarchi}:${POSTGRES_PASSWORD:-anarchi_password}@postgres:5432/${POSTGRES_DB:-anarchi_db}
+      GOOGLE_CSE_ID: ${GOOGLE_CSE_ID:-}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY:-}
+      BING_SEARCH_KEY: ${BING_SEARCH_KEY:-}
+    networks:
+      - anarchi-spine
+
+  dedup-engine:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: anarchi_dedup_engine
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    working_dir: /app
+    volumes:
+      - .:/app
+      - ./data:/app/data
+    command: python3 -u /app/workers/dedup_engine.py
+    environment:
+      BOT_NAME: dedup-engine
+      BOT_MODE: headless
+      BOT_INTERVAL_SECONDS: "600"
+      DATABASE_URL: postgres://${POSTGRES_USER:-anarchi}:${POSTGRES_PASSWORD:-anarchi_password}@postgres:5432/${POSTGRES_DB:-anarchi_db}
+    networks:
+      - anarchi-spine
+
+  seo-bundle-gen:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: anarchi_seo_bundle_gen
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    working_dir: /app
+    volumes:
+      - .:/app
+      - ./data:/app/data
+    command: python3 -u /app/workers/seo_bundle_generator.py
+    environment:
+      BOT_NAME: seo-bundle-gen
+      BOT_MODE: headless
+      BOT_INTERVAL_SECONDS: "600"
+      DATABASE_URL: postgres://${POSTGRES_USER:-anarchi}:${POSTGRES_PASSWORD:-anarchi_password}@postgres:5432/${POSTGRES_DB:-anarchi_db}
+    networks:
+      - anarchi-spine
+
+  llm-blogger:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: anarchi_llm_blogger
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ollama:
+        condition: service_started
+    working_dir: /app
+    volumes:
+      - .:/app
+      - ./data:/app/data
+    command: python3 -u /app/workers/llm_blogger.py
+    environment:
+      BOT_NAME: llm-blogger
+      BOT_MODE: headless
+      BOT_INTERVAL_SECONDS: "1200"
+      DATABASE_URL: postgres://${POSTGRES_USER:-anarchi}:${POSTGRES_PASSWORD:-anarchi_password}@postgres:5432/${POSTGRES_DB:-anarchi_db}
+      OLLAMA_URL: http://ollama:11434
+      OLLAMA_MODEL: mistral
+    networks:
+      - anarchi-spine
+
   cloudflared:
     image: cloudflare/cloudflared:latest
     container_name: anarchi_cloudflared
@@ -148,6 +257,7 @@ services:
 
 volumes:
   postgres_data:
+  ollama_data:
 
 networks:
   anarchi-spine:

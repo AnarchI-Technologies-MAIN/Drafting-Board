@@ -20,6 +20,39 @@ def ensure_schema():
         with conn.cursor() as cur:
             cur.execute(
                 """
+                CREATE TABLE IF NOT EXISTS content_hashes (
+                    id SERIAL PRIMARY KEY,
+                    content_hash TEXT NOT NULL UNIQUE,
+                    normalized_content TEXT,
+                    source_url TEXT,
+                    is_duplicate_of INT REFERENCES content_hashes(id),
+                    first_seen_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                    similarity_score FLOAT DEFAULT 0.0
+                );
+                """
+            )
+            cur.execute(
+                "CREATE INDEX IF NOT EXISTS idx_content_hashes_created_at ON content_hashes (first_seen_at DESC);"
+            )
+            cur.execute(
+                """
+                CREATE TABLE IF NOT EXISTS seo_bundles (
+                    id SERIAL PRIMARY KEY,
+                    crawl_document_id INT REFERENCES crawl_documents(id),
+                    primary_keyword TEXT,
+                    long_tail_keywords JSONB NOT NULL DEFAULT '[]'::jsonb,
+                    hashtags JSONB NOT NULL DEFAULT '[]'::jsonb,
+                    meta_description TEXT,
+                    schema_json JSONB NOT NULL DEFAULT '{}'::jsonb,
+                    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+                );
+                """
+            )
+            cur.execute(
+                "CREATE INDEX IF NOT EXISTS idx_seo_bundles_document_id ON seo_bundles (crawl_document_id);"
+            )
+            cur.execute(
+                """
                 CREATE TABLE IF NOT EXISTS bot_runs (
                     id SERIAL PRIMARY KEY,
                     bot_name TEXT NOT NULL,
@@ -53,6 +86,7 @@ def ensure_schema():
                     slug TEXT NOT NULL UNIQUE,
                     title TEXT NOT NULL,
                     topic TEXT,
+                    summary TEXT,
                     body TEXT,
                     status TEXT NOT NULL DEFAULT 'draft',
                     metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
@@ -145,23 +179,24 @@ def write_document(source_name, title, url, summary, keywords=None, image_refs=N
             return cur.rowcount
 
 
-def write_post(slug, title, topic, body, status="draft", metadata=None):
+def write_post(slug, title, topic, body, summary=None, status="draft", metadata=None):
     ensure_schema()
     with get_connection() as conn:
         with conn.cursor() as cur:
             cur.execute(
                 """
-                INSERT INTO generated_posts (slug, title, topic, body, status, metadata)
-                VALUES (%s, %s, %s, %s, %s, %s)
+               INSERT INTO generated_posts (slug, title, topic, summary, body, status, metadata)
+               VALUES (%s, %s, %s, %s, %s, %s, %s)
                 ON CONFLICT (slug) DO UPDATE SET
                     title = EXCLUDED.title,
                     topic = EXCLUDED.topic,
-                    body = EXCLUDED.body,
-                    status = EXCLUDED.status,
-                    metadata = EXCLUDED.metadata,
-                    created_at = NOW()
-                """,
-               (slug, title, topic, body, status, json.dumps(metadata or {})),
+                   summary = EXCLUDED.summary,
+                   body = EXCLUDED.body,
+                   status = EXCLUDED.status,
+                   metadata = EXCLUDED.metadata,
+                   created_at = NOW()
+               """,
+               (slug, title, topic, summary, body, status, json.dumps(metadata or {})),
             )
             return cur.rowcount
 
