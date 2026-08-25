@@ -1,0 +1,19 @@
+{
+  "id": "issue_solidity_reentrancy_001",
+  "title": "Preventing Cross-Function Reentrancy Attacks in Ethereum Smart Contracts",
+  "slug": "preventing-cross-function-reentrancy-attacks-in-ethereum-smart-contracts",
+  "tech_stack": [
+    "Solidity",
+    "Web3",
+    "Ethereum",
+    "Smart Contract",
+    "Hardhat"
+  ],
+  "topic_cluster": "solidity-reentrancy",
+  "cleaned_summary": "Developer friction analysis: High-severity reentrancy vulnerability detected in ETH token withdrawal routines. External call state changes were executed prior to state update variable assignment, allowing attacker contracts to recurse back into state logic.",
+  "cleaned_content": "Developer friction analysis: High-severity reentrancy vulnerability detected in ETH token withdrawal routines. External call state changes were executed prior to state update variable assignment, allowing attacker contracts to recurse back into state logic.\n\n### System Interaction Diagram\n<!-- DIAGRAM_REFERENCE_PLACEHOLDER -->\n\n### Fix Implementation\nApply the Checks-Effects-Interactions pattern or OpenZeppelin ReentrancyGuard mutex locks before making external calls.",
+  "linked_diagram_hash": "e846e0ae7ee92c88d1159d21b79d8c769a798e2c051cb6617bd9f941348d0e3a",
+  "diagram_format": "mermaid",
+  "source": "github-issues-stream",
+  "extracted_at": "2026-08-25T13:04:30.332228"
+}

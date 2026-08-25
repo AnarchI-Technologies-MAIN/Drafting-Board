@@ -1,0 +1,19 @@
+{
+  "id": "issue_sentry_node_tracing_002",
+  "title": "Fixing Node.js Memory Leaks and Unhandled Rejections in High-Concurrency Express Apps",
+  "slug": "fixing-nodejs-memory-leaks-and-unhandled-rejections-in-high-concurrency-express-apps",
+  "tech_stack": [
+    "Node.js",
+    "Express",
+    "TypeScript",
+    "Sentry",
+    "V8"
+  ],
+  "topic_cluster": "node-memory-leak",
+  "cleaned_summary": "During peak load testing on Node.js v20 runtime, event loop delay spikes past 450ms due to uncollected event emitter listeners attached to active request sockets.",
+  "cleaned_content": "During peak load testing on Node.js v20 runtime, event loop delay spikes past 450ms due to uncollected event emitter listeners attached to active request sockets.\n\n### Flow Model\n<!-- DIAGRAM_REFERENCE_PLACEHOLDER -->\n\n### Resolution\nUse `once()` listener attachments and integrate Sentry profiling hooks to identify socket garbage collection leaks in real-time.",
+  "linked_diagram_hash": "a5176b602f04596f33467fd133e6da05d0883112a02821ee04148b8bddaf7927",
+  "diagram_format": "mermaid",
+  "source": "public-tech-forum",
+  "extracted_at": "2026-08-25T13:04:30.334228"
+}

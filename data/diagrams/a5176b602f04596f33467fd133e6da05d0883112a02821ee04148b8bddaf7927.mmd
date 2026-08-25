@@ -1,0 +1,5 @@
+graph TD
+    A[Incoming HTTP Client] -->|Keep-Alive Socket| B[Express Router]
+    B --> C[Custom Global EventEmitter]
+    C -->|Leaked Listener Reference| D[V8 Heap Memory Overflow]
+    D -->|OOM Exception| E[Node Process Crash]

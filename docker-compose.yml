@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  anarchi-engine:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: anarchi_blog_engine
+    ports:
+      - "3080:3080"
+    environment:
+      - PORT=3080
+      - NODE_ENV=production
+    volumes:
+      - ./data:/app/data
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          memory: 128M
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3080/api/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

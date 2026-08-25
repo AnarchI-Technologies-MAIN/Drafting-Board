@@ -1,0 +1,27 @@
+{
+  "version": "1.0",
+  "providers": [
+    {
+      "id": "carbon-dev-native",
+      "name": "Carbon Ads Developer Native",
+      "type": "native_card",
+      "slot": "in_article",
+      "badge": "SPONSORED DEV TOOL",
+      "headline": "Accelerate Your CI/CD Workflows",
+      "description": "Streamline builds with zero-configuration edge caching and automated container vulnerability scanning.",
+      "target_url": "https://anarchi-tech.com/ads/redirect/carbon-dev?ref=crackback",
+      "cta_text": "Try Free Tier →"
+    },
+    {
+      "id": "ethical-ads-security",
+      "name": "EthicalAds Security Zone",
+      "type": "banner",
+      "slot": "sidebar",
+      "badge": "SCOPED SECURITY AD",
+      "headline": "Zero-Trust API Gateway Protection",
+      "description": "Block automated credential stuffing and malicious bot traffic before it reaches your backend service.",
+      "target_url": "https://anarchi-tech.com/ads/redirect/ethical-sec?ref=crackback",
+      "cta_text": "Inspect Gateway →"
+    }
+  ]
+}

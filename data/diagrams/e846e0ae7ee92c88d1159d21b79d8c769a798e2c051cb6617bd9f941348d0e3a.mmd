@@ -1,0 +1,10 @@
+sequenceDiagram
+    autonumber
+    actor AttackerContract
+    participant VulnerableVault
+    participant StateTracker
+    AttackerContract->>VulnerableVault: withdraw(amount)
+    VulnerableVault->>StateTracker: checkBalance()
+    VulnerableVault->>AttackerContract: rawCall{value: amount}()
+    AttackerContract->>VulnerableVault: fallback() -> withdraw(amount)
+    VulnerableVault->>StateTracker: updateBalance() [NEVER REACHED]

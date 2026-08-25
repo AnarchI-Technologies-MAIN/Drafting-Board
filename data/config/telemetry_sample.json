@@ -1,0 +1,35 @@
+[
+  {
+    "category_id": "cat_solidity_reentrancy",
+    "topic_cluster": "solidity-reentrancy",
+    "impressions": 1250,
+    "interaction_score": 140,
+    "link_clicks": 110,
+    "conversions_count": 8,
+    "affiliate_revenue": 380.00,
+    "wsrs_revenue": 750.00,
+    "anar_core_signups": 6
+  },
+  {
+    "category_id": "cat_node_memory_leak",
+    "topic_cluster": "node-memory-leak",
+    "impressions": 480,
+    "interaction_score": 65,
+    "link_clicks": 8,
+    "conversions_count": 1,
+    "affiliate_revenue": 5.00,
+    "wsrs_revenue": 0.00,
+    "anar_core_signups": 0
+  },
+  {
+    "category_id": "cat_php_deprecated_arrays",
+    "topic_cluster": "php-deprecated-arrays",
+    "impressions": 680,
+    "interaction_score": 12,
+    "link_clicks": 1,
+    "conversions_count": 0,
+    "affiliate_revenue": 0.00,
+    "wsrs_revenue": 0.00,
+    "anar_core_signups": 0
+  }
+]

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anarchi-Technologies | Operations & Feedback Matrix Console</title>
+  <link rel="stylesheet" href="/blog/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <header class="hero">
+      <div class="brand">
+        <div class="brand-icon">⚙️</div>
+        <div class="brand-text">
+          <h1>ANARCHI-TECHNOLOGIES ADMIN</h1>
+          <p>Revenue-Weighted Feedback Matrix & Telemetry Operations</p>
+        </div>
+      </div>
+      <div class="host-badge">
+        <span class="pulse"></span>
+        <span id="hostInfo">N150-HOST (4GB RAM)</span>
+      </div>
+    </header>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">RAM Usage / Footprint</div>
+        <div class="stat-value" id="statRam">-- MB</div>
+        <div class="stat-sub">Strict <4GB Envelope</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Deduplicated Diagrams</div>
+        <div class="stat-value" id="statDiagrams">0</div>
+        <div class="stat-sub">SHA-256 Object Store</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Compiled Posts</div>
+        <div class="stat-value" id="statPosts">0</div>
+        <div class="stat-sub">WSRS & Affiliate Routed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Blacklisted Dead Topics</div>
+        <div class="stat-value" id="statDead">0</div>
+        <div class="stat-sub">Rule 1 Auto-Dropped</div>
+      </div>
+    </div>
+
+    <div class="actions-bar">
+      <div class="tab-group">
+        <button class="tab-btn active" onclick="switchTab('posts')">📚 Compiled Case Studies</button>
+        <button class="tab-btn" onclick="switchTab('diagrams')">📐 Diagram Store (SHA-256)</button>
+        <button class="tab-btn" onclick="switchTab('matrix')">⚙️ Revenue Matrix Config</button>
+      </div>
+      <button class="btn-primary" onclick="triggerPipelineRun()">
+        <span>🚀 Trigger Pipeline Cycle</span>
+      </button>
+    </div>
+
+    <div id="tab-posts" class="tab-content active">
+      <div class="posts-grid" id="postsContainer"></div>
+    </div>
+
+    <div id="tab-diagrams" class="tab-content">
+      <div id="diagramsContainer"></div>
+    </div>
+
+    <div id="tab-matrix" class="tab-content">
+      <div class="matrix-container">
+        
+        <div class="matrix-box">
+          <h3>❌ Dead Topics Blacklist (Rule 1: Drop)</h3>
+          <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
+            Topics exceeding 500 impressions with $0.00 direct services or affiliate commissions.
+          </p>
+          <div id="deadTopicsContainer"></div>
+        </div>
+
+        <div class="matrix-box">
+          <h3>🚀 Priority Tier Amplifications (Rule 2: Amplify)</h3>
+          <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
+            Clusters demonstrating high conversion coefficients or Anar-Core signups.
+          </p>
+          <div id="amplifiedContainer"></div>
+        </div>
+
+        <div class="matrix-box" style="grid-column: 1 / -1;">
+          <h3>🔄 Layout Modifier Flags (Rule 3: Rewrite)</h3>
+          <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
+            High-traffic topics (>200 impressions) with weak monetization triggering CTA rotations or vendor swaps.
+          </p>
+          <div id="modifiersContainer"></div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="markdown-modal" id="mdModal">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeModal()">×</button>
+      <div id="modalBody" class="md-body"></div>
+    </div>
+  </div>
+
+  <script src="/blog/app.js"></script>
+</body>
+</html>
