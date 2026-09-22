@@ -5,3 +5,11 @@ cloudflared/*.pem
 cloudflared/*.json
 node_modules/
 .DS_Store
+__pycache__/
+*.py[cod]
+data/workers/
+data/search_audits/
+data/crawl_audits/
+data/generation_audits/
+data/market_bucket/
+data/artifacts/index.json

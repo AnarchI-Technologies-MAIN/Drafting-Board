@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "anarchi.blogger.educational-topic.v1",
+  "title": "AnarchI Blogger Educational Topic",
+  "description": "Bounded semantic knowledge unit used by the Blogger educational corpus.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "topic_id",
+    "title",
+    "domain",
+    "starting_question",
+    "barrier",
+    "evidence_required",
+    "historical_context",
+    "transformation",
+    "current_truth",
+    "lesson",
+    "related_topics",
+    "status",
+    "provenance",
+    "completion_boundary",
+    "prerequisites",
+    "demonstrations",
+    "examples",
+    "diagrams"
+  ],
+  "properties": {
+    "schema": {
+      "const": "anarchi.blogger.educational-topic.v1"
+    },
+    "topic_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "domain": {
+      "type": "string",
+      "minLength": 1
+    },
+    "starting_question": {
+      "type": "string",
+      "minLength": 1
+    },
+    "barrier": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence_required": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "historical_context": {
+      "type": "string",
+      "minLength": 1
+    },
+    "transformation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "current_truth": {
+      "type": "string",
+      "minLength": 1
+    },
+    "lesson": {
+      "type": "string",
+      "minLength": 1
+    },
+    "related_topics": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "PLANNED",
+        "RESEARCHING",
+        "DRAFTED",
+        "VALIDATING",
+        "VERIFIED",
+        "REJECTED",
+        "DEPRECATED"
+      ]
+    },
+    "provenance": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "completion_boundary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "prerequisites": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "demonstrations": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "examples": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "diagrams": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}

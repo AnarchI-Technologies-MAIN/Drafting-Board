@@ -9,6 +9,7 @@
     "description": "Stop guessing why your node or container failed. Sentry gives code-level stacktraces, performance telemetry, and instant diagnostic alerts.",
     "badge_color": "#362D59",
     "payout_score": 95
+    ,"affiliate_verified": false
   },
   {
     "id": "datadog-apm",
@@ -20,6 +21,7 @@
     "description": "Monitor system memory leaks, thread starvation, and fiber line latency with Datadog APM.",
     "badge_color": "#632CA6",
     "payout_score": 90
+    ,"affiliate_verified": false
   },
   {
     "id": "vercel-enterprise",
@@ -31,6 +33,7 @@
     "description": "Instant global CDN deployment and programmatic frontend preview pipelines.",
     "badge_color": "#000000",
     "payout_score": 85
+    ,"affiliate_verified": false
   },
   {
     "id": "certik-security-audit",
@@ -42,5 +45,6 @@
     "description": "Shield decentralized protocols from reentrancy attacks, flash loan exploits, and signature replay bugs.",
     "badge_color": "#F39C12",
     "payout_score": 98
+    ,"affiliate_verified": false
   }
 ]

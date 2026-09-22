@@ -1,0 +1,29 @@
+{
+  "schema": "anarchi.blog-market-visual-contract-manifest.v1",
+  "activation_state": "ISOLATED_NOT_WIRED",
+  "contracts": [
+    {"name": "keyword_observation", "schema": "anarchi.keyword-observation.v1", "digest": "receipt_digest", "authority": "NONE"},
+    {"name": "niche_assessment", "schema": "anarchi.niche-assessment.v1", "digest": "assessment_digest", "authority": "RELEVANCE_ONLY"},
+    {"name": "serp_evidence", "schema": "anarchi.serp-evidence.v1", "digest": "evidence_receipt_digest", "authority": "PROVENANCE_ONLY"},
+    {"name": "topic_qualification", "schema": "anarchi.topic-qualification.v1", "digest": "topic_packet_digest", "authority": "CANDIDATE_ELIGIBILITY_ONLY"},
+    {"name": "article_worker_input", "schema": "anarchi.article-worker-input.v1", "digest": "article_input_digest", "authority": "NONE"},
+    {"name": "affiliate_candidate", "schema": "anarchi.affiliate-candidate.v1", "digest": "candidate_digest", "authority": "CANDIDATE_ONLY"},
+    {"name": "affiliate_program_observation", "schema": "anarchi.affiliate-program-observation.v1", "digest": "program_observation_digest", "authority": "OBSERVED_TERMS_ONLY"},
+    {"name": "seo_plan", "schema": "anarchi.seo-plan.v1", "digest": "seo_plan_digest", "authority": "PLANNING_ONLY"},
+    {"name": "seo_validation", "schema": "anarchi.seo-validation.v1", "digest": "seo_validation_digest", "authority": "VALIDATION_ONLY"},
+    {"name": "publication_execution_receipt", "schema": "anarchi.publication-execution-receipt.v1", "digest": "publication_receipt_digest", "authority": "RECORDS_EXISTING_EXTERNAL_AUTHORITY"},
+    {"name": "post_telemetry", "schema": "anarchi.post-telemetry.v1", "digest": "telemetry_receipt_digest", "authority": "OBSERVATION_ONLY"},
+    {"name": "image_opportunity", "schema": "anarchi.image-opportunity.v1", "digest": "assessment_digest", "authority": "RECOMMENDATION_ONLY"},
+    {"name": "image_request", "schema": "anarchi.blog-image-request.v1", "digest": "request_digest", "authority": "REQUEST_ONLY"},
+    {"name": "image_plan", "schema": "anarchi.blog-image-plan.v1", "digest": "plan_digest", "authority": "PLANNING_ONLY"},
+    {"name": "image_candidate", "schema": "anarchi.blog-image-candidate.v1", "digest": "generation_receipt_digest", "authority": "CANDIDATE_ONLY"},
+    {"name": "image_review_interface", "schema": "anarchi.blog-image-review-interface.v1", "digest": "review_interface_digest", "authority": "WITHHELD_PENDING_HUMAN_R16"},
+    {"name": "image_market_comparison", "schema": "anarchi.image-market-comparison.v1", "digest": "comparison_digest", "authority": "OBSERVED_ASSOCIATION_ONLY"}
+  ],
+  "authority_invariants": {
+    "new_publication_authority_created": 0,
+    "new_factual_authority_created": 0,
+    "new_automatic_image_approval_created": 0,
+    "production_publication_enabled": 0
+  }
+}

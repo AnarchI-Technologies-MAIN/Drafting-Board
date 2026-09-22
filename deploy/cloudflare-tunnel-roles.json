@@ -1,0 +1,17 @@
+{
+  "schema": "anarchi.cloudflare-tunnel-roles.v1",
+  "tunnels": {
+    "public": {
+      "id": "0b176fba-e74f-4141-81a7-b9c8323582d7",
+      "purpose": "public product surfaces"
+    },
+    "infrastructure": {
+      "id": "c22ef881-65f9-47a2-a9d7-b1bdeaf94e17",
+      "purpose": "private infrastructure administration"
+    },
+    "saas": {
+      "id": "76a398c4-360e-4cfe-90fa-ab7621b8ab9e",
+      "purpose": "authenticated SaaS application ingress"
+    }
+  }
+}

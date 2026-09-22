@@ -6,16 +6,16 @@
     "solidity-reentrancy": {
       "priority_tier": 5,
       "boost_factor": 7.5,
-      "updated_at": "2026-08-25T18:04:33.866Z"
+      "updated_at": "2026-08-29T11:25:54.765Z"
     }
   },
   "layout_modifiers": {
     "node-memory-leak": {
       "cta_layout_rotation": true,
-      "affiliate_mix_swap": true,
-      "updated_at": "2026-08-25T18:04:33.869Z"
+      "affiliate_mix_swap": false,
+      "updated_at": "2026-08-29T11:25:54.765Z"
     }
   },
-  "version": 6,
-  "last_updated": "2026-08-25T18:04:33.869Z"
+  "version": 7,
+  "last_updated": "2026-08-29T11:25:54.767Z"
 }

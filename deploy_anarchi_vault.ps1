@@ -187,7 +187,6 @@ if __name__ == "__main__":
     barrier = AnarchiMembraneBarrier()
     context = barrier.generate_ephemeral_handle(
         user_identity="usr:anar-core:identity:77x9",
-        membership_tag="membership:adforge:intelligence_tier_3",
         requested_capability="capability:publish_marketing_artifact_z"
     )
     if context:

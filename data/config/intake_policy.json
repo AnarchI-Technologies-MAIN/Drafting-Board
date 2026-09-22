@@ -1,0 +1,89 @@
+{
+  "schema": "anarchi.editorial-intake-policy.v1",
+  "minimum_total_score": 72,
+  "minimum_value_score": 55,
+  "minimum_problem_score": 55,
+  "max_new_queries_per_cycle": 12,
+  "max_signal_queries_per_cluster": 4,
+  "scoring_note": "Traffic and commercial scores are evidence-backed proxies, not claimed search-volume or CPC measurements. Connect Search Console or a licensed keyword-data provider before labeling either metric as measured.",
+  "clusters": [
+    {
+      "id": "local-moe-inference",
+      "label": "Local MoE inference engineering",
+      "keywords": ["local llm", "mixture of experts", "moe", "ollama", "vllm", "inference", "quantization", "rag", "gpu memory"],
+      "queries": [
+        "local MoE LLM inference optimization for production",
+        "Ollama mixture of experts memory and latency troubleshooting",
+        "self hosted RAG evaluation and hallucination debugging"
+      ],
+      "commercial_base": 86,
+      "problem_base": 82,
+      "intent": "engineering-commercial-investigation"
+    },
+    {
+      "id": "cloud-native-reliability",
+      "label": "Cloud-native reliability and cost",
+      "keywords": ["kubernetes", "docker", "ebpf", "observability", "opentelemetry", "cloud cost", "outage", "latency", "sre"],
+      "queries": [
+        "Kubernetes production incident debugging and cost optimization",
+        "eBPF observability for high traffic microservices",
+        "OpenTelemetry cardinality and storage cost troubleshooting"
+      ],
+      "commercial_base": 92,
+      "problem_base": 90,
+      "intent": "enterprise-problem-solution"
+    },
+    {
+      "id": "software-supply-chain",
+      "label": "Software supply-chain security",
+      "keywords": ["sbom", "slsa", "dependency", "supply chain", "container security", "ci/cd", "secrets", "zero trust"],
+      "queries": [
+        "SBOM and SLSA implementation for enterprise CI/CD",
+        "container supply chain attack prevention and incident response",
+        "zero trust API gateway security for production systems"
+      ],
+      "commercial_base": 96,
+      "problem_base": 92,
+      "intent": "security-purchase-investigation"
+    },
+    {
+      "id": "database-performance",
+      "label": "High-concurrency database engineering",
+      "keywords": ["postgresql", "database", "deadlock", "connection pool", "replication", "vector database", "slow query", "index"],
+      "queries": [
+        "PostgreSQL high concurrency performance troubleshooting",
+        "database connection pool saturation incident debugging",
+        "vector database production cost and index optimization"
+      ],
+      "commercial_base": 88,
+      "problem_base": 92,
+      "intent": "production-troubleshooting"
+    },
+    {
+      "id": "node-platform-failures",
+      "label": "Node.js platform failures",
+      "keywords": ["node.js", "typescript", "memory leak", "event loop", "express", "heap", "unhandled rejection", "serverless"],
+      "queries": [
+        "Node.js production memory leak and event loop latency debugging",
+        "TypeScript backend reliability patterns for high traffic APIs",
+        "serverless cold start and timeout troubleshooting at scale"
+      ],
+      "commercial_base": 78,
+      "problem_base": 96,
+      "intent": "developer-problem-solution"
+    },
+    {
+      "id": "wallet-contract-security",
+      "label": "Wallet and smart-contract security",
+      "keywords": ["solidity", "smart contract", "wallet", "reentrancy", "web3", "signature", "ethereum", "audit", "vulnerability"],
+      "queries": [
+        "smart contract security audit for reentrancy and signature attacks",
+        "crypto wallet transaction safety engineering checklist",
+        "Solidity production vulnerability debugging and formal verification"
+      ],
+      "commercial_base": 98,
+      "problem_base": 96,
+      "intent": "security-audit-investigation"
+    }
+  ]
+}

@@ -19,6 +19,7 @@ const ADS_FILE = path.join(BASE_DIR, 'data', 'ads_config.json');
 // Serve static assets (CSS, JS, images) under /blog prefix
 app.use('/blog', express.static(PUBLIC_DIR));
 
+
 // Serve Admin Console routes explicitly at /blog/admin and /admin
 app.use('/blog/admin', express.static(path.join(PUBLIC_DIR, 'admin')));
 app.get('/blog/admin', (req, res) => {
